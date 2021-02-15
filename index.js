@@ -8,6 +8,8 @@ const product =require('./routes/product')
 const auth=require('./routes/auth')
 require('dotenv').config()
 mongoose.set('useFindAndModify', false);
+
+/////// check if env variables is set or no /////
 if(!process.env.SECRET_KEY)
 {
   console.error('FATAL ERROR: Secret_key is not defined !!')
@@ -15,6 +17,7 @@ if(!process.env.SECRET_KEY)
   process.exit(1)
 }
 
+/////////////check if connected to db or no ///////////////
 mongoose.connect('mongodb://localhost/EcommerceDB',{useNewUrlParser: true , useUnifiedTopology: true})
 .then(()=> console.log('connected to MongodDB ...'))
 .catch((err)=>console.error('can not connect to MongoDB',err))
@@ -38,6 +41,7 @@ app.use((req, res, next) => {
     res.status(500).send({ error: 'internal server error' })
     next(err);
   });
+  
   
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))

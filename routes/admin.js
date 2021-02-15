@@ -8,7 +8,7 @@ const auth=require('../middleware/auth')
 
 
 
-
+/////////////////get all admins ////////////////////////
 router.get('/', auth, async(req, res)=> {
   
     const admins= await Admin.find();
@@ -17,6 +17,7 @@ router.get('/', auth, async(req, res)=> {
  
     })
 
+///////////////register a new admin ////////////////////////////
 
     router.post('/register',body('email').isLength({ min: 1 })
     .withMessage('email is required'),

@@ -1,5 +1,7 @@
 const jwt=require('jsonwebtoken')
 
+////////////////authorization //////////////////////////////
+//////////////check header token if exist and valid or no /////////////////
 module.exports=function auth(req,res,next)
 {    
     const token=req.header('x-token')

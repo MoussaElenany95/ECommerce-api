@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+//////////// schema for product table in DB ////////////////////
 const productSchema=new mongoose.Schema({
     title:{type:String,required:true},
     image:{data: Buffer, contentType: String },
@@ -7,7 +8,7 @@ const productSchema=new mongoose.Schema({
     details:{ type:String,required:true 
     }
 })
-
+   ///////match product schema with product table ///////
  const  Product=mongoose.model('product',productSchema)
 
  module.exports=Product;
