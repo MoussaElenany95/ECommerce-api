@@ -4,23 +4,28 @@ const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 
 const schema = new mongoose.Schema({
-    _order: {
+    _user:{
         type: mongoose.ObjectId,
         ref: "users",
         required: true
     },
+    _product: {
+        type: mongoose.ObjectId,
+        ref: "products",
+        required: true
+    },
     totalPrice: {
         type: Number,
-        required: true,
     }
 })
 module.exports.carts = mongoose.model('Cart', schema)
 
 //validation 
-module.exports.validateOrder = function validateOrder(Cart) {
+module.exports.validateCart = function validateCart(Cart) {
     const schema = Joi.object({
-        _order: Joi.objectId().required(),
-        totalPrice: Joi.number().required()
+        _user: Joi.objectId().required(),
+        _product: Joi.objectId().required(),
+        totalPrice: Joi.number()
     })
     return schema.validate(Cart);
 };

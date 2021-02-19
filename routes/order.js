@@ -7,7 +7,7 @@ const admin = require('../middleware/admin');
 // get all orders for admin
 router.get('/orders', [auth, admin], async (req, res) => {
     const allOrders = await orders.find({});
-    if (!allOrders) return res.send("orders doesn't exist.");
+    if (!allOrders) return res.send("orders don't exist.");
     res.send(allOrders);
 })
 
@@ -15,7 +15,7 @@ router.get('/orders', [auth, admin], async (req, res) => {
 router.get('/', auth, async (req, res) => {
 
     const allOrders = await orders.find({ _user: req.user._id });
-    if (!allOrders) return res.send("orders doesn't exist.");
+    if (!allOrders) return res.send("orders don't exist.");
     res.send(allOrders);
 
 })
