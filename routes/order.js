@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 
 // get all orders for admin
-router.get('/', [auth, admin], async (req, res) => {
+router.get('/orders', [auth, admin], async (req, res) => {
     const allOrders = await orders.find({});
     if (!allOrders) return res.send("orders doesn't exist.");
     res.send(allOrders);
