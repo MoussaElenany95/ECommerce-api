@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 //////////// schema for product table in DB ////////////////////
 const productSchema=new mongoose.Schema({
     title:{type:String,required:true},
-    image:{data: Buffer, contentType: String },
+    image:  {type:String},
+    cloudinary_id:{type:String},
     price:{type:Number,required:true} ,
     details:{ type:String,required:true 
     }
