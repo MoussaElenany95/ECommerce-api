@@ -8,6 +8,8 @@ const admin = require('./routes/admin');
 const product = require('./routes/product');
 const order = require('./routes/order');
 const auth = require('./routes/auth');
+const bodyParser = require("body-parser");
+
 require('dotenv').config();
 
 /////// check if env variables is set or no /////
@@ -26,6 +28,10 @@ app.use((req, res, next) => {
   next()
 });
 
+
+app.use(express.static('public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: "50mb" }));

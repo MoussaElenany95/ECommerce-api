@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, validate: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ },
     username: { type: String, required: true },
     password: { type: String, required: true },
-    image: { data: Buffer, contentType: String },
+    image:  {type:String},
+    cloudinary_id:{type:String},
     gender: { type: String, required: true },
     isAdmin: { type: Boolean, default: false }
 })
