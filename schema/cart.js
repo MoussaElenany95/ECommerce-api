@@ -10,9 +10,8 @@ const schema = new mongoose.Schema({
         required: true
     },
     _product: {
-        type: mongoose.ObjectId,
+        type: [mongoose.ObjectId],
         ref: "products",
-        required: true
     },
     totalPrice: {
         type: Number,
@@ -24,7 +23,17 @@ module.exports.carts = mongoose.model('Cart', schema)
 module.exports.validateCart = function validateCart(Cart) {
     const schema = Joi.object({
         _user: Joi.objectId().required(),
-        _product: Joi.objectId().required(),
+        _product: Joi.array().items(Joi.objectId()),
+        totalPrice: Joi.number()
+    })
+    return schema.validate(Cart);
+};
+
+//validate add product to cart
+module.exports.validateCartUpdate = function validateCartUpdate(Cart) {
+    const schema = Joi.object({
+        _user: Joi.objectId().required(),
+        _product: Joi.objectId(),
         totalPrice: Joi.number()
     })
     return schema.validate(Cart);

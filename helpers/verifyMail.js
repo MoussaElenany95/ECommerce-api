@@ -38,7 +38,7 @@ module.exports.sendMail = async function (userMail, username, userId) {
                    </body>`,
         });
 
-        console.log("Message sent: %s", info);
+        console.log("Message sent: %s", info.messageId);
     }
     catch (err) {
         console.log(err.message)

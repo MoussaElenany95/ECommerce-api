@@ -8,6 +8,7 @@ const admin = require('./routes/admin');
 const product = require('./routes/product');
 const order = require('./routes/order');
 const auth = require('./routes/auth');
+const cart = require('./routes/cart');
 const bodyParser = require("body-parser");
 
 require('dotenv').config();
