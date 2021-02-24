@@ -30,6 +30,9 @@ body('password').isLength({ min: 1 })
        /////////// chech if password match usename password 
        const validPassword=await bcrypt.compare(req.body.password,user.password)
        if(validPassword===false)return res.status(400).send('invalid email or password') 
+
+       //check mail verification 
+       if (user.isActive != true) res.status(404).send("Please verify your email to login.");
     
         /////////// create token by user id //////////
        const token=jwt.sign({_id:user._id},process.env.SECRET_KEY)

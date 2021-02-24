@@ -7,6 +7,7 @@ const User = require('../schema/user');
 const auth=require('../middleware/auth')
 const cloudinary=require('../middleware/cloudinary').upload
 const upload=require('../middleware/upload')
+const { sendMail } = require('../helpers/verifyMail');
 let imageUrl;
 
 
@@ -59,6 +60,7 @@ body('password').isLength({ min: 4 })
        ///// save new user
     try{
         await user.save()
+        sendMail(user.email, user.username, user._id);
        
        return res.send({message:'user was registered successfully'}) 
     }
@@ -123,6 +125,25 @@ body('password').isLength({ min: 4 })
         await User.deleteOne(user)
         if(user) return res.send({message:'user deleted successfuly'})
    })
+
+    //verify account via mail 
+    router.get( '/verify/:id', async function (req, res) {
+
+      const { id } = req.params;
+  
+      //Checkin if the user exists
+      let verifiedUser = await User.findOne({ _id: id });
+      if (!verifiedUser) return res.status(404).send("user doesn't exist.");
+  
+      //change state if exist to be active
+      const activate = {
+          isActive: true
+      }
+      await User.findByIdAndUpdate(id, activate);
+  
+      res.status(200);
+      res.sendFile('views/activation.html', {root: __dirname });
+  })
+  
   
     module.exports=router
-   

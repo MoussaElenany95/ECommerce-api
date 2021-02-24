@@ -40,6 +40,7 @@ app.use('/api/users', user);
 app.use('/api/admin', admin);
 app.use('/api/product', product);
 app.use('/api/order', order);
+app.use('/api/cart', cart);
 app.use('/api/users', auth);
 app.use('/api/admin', auth);
 
