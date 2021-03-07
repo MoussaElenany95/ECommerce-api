@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 
 //////////// schema for user table in DB ////////////////////
 const userSchema = new mongoose.Schema({
-    email: { type: String, required: true, validate: /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/ },
+    email: { type: String, required: true },
     username: { type: String, required: true },
     password: { type: String, required: true },
     image:  {type:String},

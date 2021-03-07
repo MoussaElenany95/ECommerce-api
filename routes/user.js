@@ -13,7 +13,8 @@ let imageUrl;
 
 /////////////////////////////// register new user //////////////////////////////////
 
-router.post('/register',upload,body('email').isLength({ min: 1 })
+router.post('/register'
+,body('email').isLength({ min: 1 })
 .withMessage('email is required'),
 body('username').isLength({ min: 1 })
 .withMessage('username is required'),
@@ -21,7 +22,7 @@ body('password').isLength({ min: 4 })
 .withMessage('password is required')
 , body('gender').isLength({ min: 1 })
 .withMessage('gender is required')
-, async(req, res) => {
+,upload, async(req, res) => {
        ///// body validation
        
        const errors = validationResult(req); 
@@ -31,10 +32,9 @@ body('password').isLength({ min: 4 })
        let isUser=await User.findOne({username:req.body.username})
        if(isUser) return res.status(400).send('user already registered') 
        ///////////////check if image uploaded 
-       if (!req.files || _.isEmpty(req.files)) {
+      if (!req.files || _.isEmpty(req.files)) {
         return res.status(400)
-            .send({error:"No file uploaded"})
-    }
+            .send({error:"No file uploaded"})    }
     try {
         
          image =  await cloudinary(req.file.path);
@@ -48,9 +48,9 @@ body('password').isLength({ min: 4 })
          email:req.body.email,
          username:req.body.username,
          password:req.body.password,
-         gender:req.body.gender,
          image:image.url,
-         cloudinary_id: image.public_id
+         gender:req.body.gender
+        
         });
        //// hashing password
        const salt=await bcrypt.genSalt(10);
