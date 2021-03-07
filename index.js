@@ -8,6 +8,7 @@ const admin = require('./routes/admin');
 const product = require('./routes/product');
 const order = require('./routes/order');
 const auth = require('./routes/auth');
+const cart = require('./routes/cart');
 const bodyParser = require("body-parser");
 
 require('dotenv').config();
@@ -40,6 +41,7 @@ app.use('/api/users', user);
 app.use('/api/admin', admin);
 app.use('/api/product', product);
 app.use('/api/order', order);
+app.use('/api/cart', cart);
 app.use('/api/users', auth);
 app.use('/api/admin', auth);
 

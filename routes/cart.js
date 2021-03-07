@@ -1,46 +1,76 @@
 const express = require('express');
 const router = express.Router();
-const { carts, validateCart } = require('../schema/cart');
+const { carts, validateCart, validateCartUpdate } = require('../schema/cart');
 const products = require('../schema/product');
 const auth = require('../middleware/auth');
-const admin = require('../middleware/admin');
 
 // get all products in cart for user
-router.get('/', [auth, admin], async (req, res) => {
-    const productsIds = await carts.find({ "_user": req.user._id }, { _product: 1, _id: 0, _user: 0, totalPrice: 0 });
-    if (!productsIds) return res.send("orders don't exist.");
-    const userProducts = await products.find({ "_id": { "$in": productsIds } });
-    if (!userProducts) return res.status(400).send("products don't exist.");
-    res.send(userProducts);
+router.get('/', auth, async function (req, res) {
+    try {
+        //find the user cart
+        const _user = req.user._id;
+        const userCart = await carts.findOne({ _user }, { _product: 1 });
+        if (!userCart) return res.send("orders don't exist.");
+        //get his productsIds array
+        const productsIds = userCart._product;
+        //get user products 
+        const userProducts = await products.find({ "_id": { "$in": productsIds } });
+        if (!userProducts) return res.status(400).send("products don't exist.");
+        res.status(200).send(userProducts);
+    } catch (err) {
+        res.send({ error: err })
+    }
 });
 
-//user to delete from cart 
-router.delete('/:id', auth, async (req, res) => {
-
-    if (req.user._id != cart._user) return res.status(405).send('method not allowed.');
-    const cart = await carts.find({ "_user": req.user._id, "_product": req.params.id });
-    if (!cart) return res.status(404).send("failed to find the cart.");
-    await orders.deleteOne(cart);
-    return res.send("product was deleted successfully");
-
+//user to delete product from cart 
+router.delete('/:id', auth, async function (req, res) {
+    try {
+        const _user = req.user._id;
+        const _product = req.params.id;
+        //find the cart of this user 
+        const cart = await carts.findOne({ _user });
+        if (!cart) return res.status(404).send("failed to find the cart.");
+        //make sure it's the owner who is deleting 
+        if (_user != cart._user) return res.status(405).send('method not allowed.');
+        //update and delete the product id from the cart 
+        await carts.updateOne({ _id: cart._id }, { $pull: { '_product': _product } });
+        return res.status(200).send("product was deleted successfully");
+    }
+    catch (err) {
+        res.send({ error: err })
+    }
 })
 
 //add product to cart
-router.post('/', auth, async (req, res) => {
-    const value = {
-        _product: req.body._product,
-        _user: req.user._id
-    } 
-    //validation
-    const { error } = validateCart(value);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    //add cart
-    let cart = new carts(value);
-
-    await cart.save();
-    res.send("success creation.")
+router.post('/', auth, async function (req, res) {
+    try {
+        //define the cart body 
+        const _user = req.user._id;
+        const value = {
+            _product: req.body._product,
+            _user
+        }
+        //validation
+        const { error } = validateCartUpdate(value);
+        if (error) return res.status(400).send(error.details[0].message);
+        //find the cart of this user 
+        let cart = await carts.findOne({ _user });
+        //create cart if user doesn't have any
+        if (!cart) {
+            //add cart
+            cart = new carts(value);
+            await cart.save();
+        }
+        //update the cart and add the product to it
+        await carts.updateOne(
+            { _id: cart._id },
+            { $addToSet: { _product: req.body._product } }
+        )
+        res.send("product added to cart successfully.")
+    }
+    catch (err) {
+        res.send({ error: err })
+    }
 })
-
 
 module.exports = router;

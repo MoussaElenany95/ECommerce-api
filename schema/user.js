@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
     image:  {type:String},
     cloudinary_id:{type:String},
     gender: { type: String, required: true },
-    isAdmin: { type: Boolean, default: false }
+    isAdmin: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: false }
 })
 userSchema.methods.generateAuthToken = (id) => {
     const token = jwt.sign(
