@@ -16,6 +16,7 @@ const fileFilter = (req, file, cb) =>{
     } else {
         cb(null, false)
     }
+    
 }
 
 const uploadImage = multer({storage: imageStorage, fileFilter: fileFilter}).single('Img');
