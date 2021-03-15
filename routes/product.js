@@ -62,7 +62,7 @@ body('title').isLength({ min: 1 })
 //////////////////////// get all products /////////////////////////////
 
 router.get('/',auth,  async(req, res)=> {
-     
+     res.res.setHeader('Access-Control-Allow-Origin', '*');
     const products= await Product.find()
       if(products) return res.send('Products list :'+products)
  
